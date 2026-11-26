@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>My Story</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#7c5cbf">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="My Story">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<style>
+:root{--bg:#fbf8f4;--card:#fff;--ink:#2b2833;--muted:#7b7584;--line:#e8e0d6;--accent:#7c5cbf;--soft:#efe8fb;--warm:#e58f6b;--sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root{--bg:#15121b;--card:#221e2e;--ink:#efeaf6;--muted:#a59fb2;--line:#322d40;--accent:#a98bf0;--soft:#2e2741;--warm:#f0a587}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;line-height:1.6}
+h1,h2,h3{font-family:Georgia,'Times New Roman',serif;font-weight:600;margin:0}
+button{font:inherit;font-size:.95rem;border:0;border-radius:999px;padding:11px 20px;min-height:44px;cursor:pointer;background:var(--accent);color:#fff}
+button:active{transform:scale(.97)}
+button.soft{background:var(--soft);color:var(--accent)}
+button.danger{background:#fdeaea;color:#b23a3a}
+@media(prefers-color-scheme:dark){button.danger{background:#3a2227;color:#ff9b9b}}
+button.ico{background:transparent;color:var(--muted);padding:8px 12px}
+input,select,textarea{font:inherit;font-size:16px;width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--soft)}
+textarea{min-height:220px;resize:vertical;line-height:1.6}
+label{display:block;font-size:.82rem;color:var(--muted);margin:14px 0 6px}
+.row{display:flex;gap:10px}.row>*{flex:1}
+
+header{position:sticky;top:0;z-index:5;padding:calc(10px + var(--sat)) 16px 10px;background:var(--bg);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
+header h1{font-size:1.3rem;margin-right:auto}
+main{max-width:680px;margin:0 auto;padding:14px 14px calc(110px + var(--sab))}
+.search{margin-bottom:12px}
+.hint{color:var(--muted);font-size:.85rem;margin:0 2px 12px}
+.card{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:16px;padding:14px 16px;margin:10px 0;cursor:pointer}
+.card h3{font-size:1.05rem}
+.meta{font-size:.78rem;color:var(--muted);margin:2px 0 6px}
+.card p{margin:0;color:var(--ink);opacity:.85;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;white-space:pre-wrap;word-break:break-word}
+.empty{text-align:center;color:var(--muted);padding:56px 18px}
+.empty h2{color:var(--ink);margin-bottom:8px}
+.fab{position:fixed;right:18px;bottom:calc(20px + var(--sab));width:60px;height:60px;border-radius:50%;padding:0;font-size:2rem;line-height:1;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--accent),var(--warm));box-shadow:0 8px 22px rgba(124,92,191,.45);z-index:6}
+
+dialog{border:0;padding:0;background:var(--card);color:var(--ink);width:min(560px,94vw);max-height:92vh;border-radius:22px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+dialog[open]{display:flex;flex-direction:column}
+dialog::backdrop{background:rgba(25,15,45,.55)}
+.dh{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--line)}
+.dh h2{font-size:1.15rem}
+.db{padding:4px 18px 16px;overflow-y:auto;flex:1}
+.df{display:flex;gap:8px;justify-content:space-between;padding:12px 18px calc(12px + var(--sab));border-top:1px solid var(--line)}
+.wc{font-size:.78rem;color:var(--muted);display:flex;justify-content:space-between;margin-top:4px}
+.menu button{display:block;width:100%;text-align:left;margin:8px 0;border-radius:14px}
+.note{font-size:.8rem;color:var(--muted);margin:10px 0}
+@media(max-width:720px){dialog{width:100vw;max-width:100vw;height:100dvh;max-height:100dvh;margin:0;border-radius:0}}
+
+#toast{position:fixed;left:50%;bottom:calc(96px + var(--sab));transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:11px 18px;border-radius:16px;font-size:.88rem;opacity:0;pointer-events:none;transition:.3s;z-index:90;max-width:90vw;text-align:center}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+
+#lock{position:fixed;inset:0;z-index:80;background:linear-gradient(135deg,#7c5cbf,#b06ab3 55%,#e58f6b);display:none;align-items:center;justify-content:center;padding:18px;overflow-y:auto}
+body.locked #lock{display:flex}
+body.locked>*:not(#lock):not(script):not(#toast){display:none!important}
+.lockcard{width:min(420px,100%);background:var(--card);border-radius:24px;padding:26px 22px 18px;text-align:center;margin:auto}
+.lockcard h1{font-size:1.45rem;margin-bottom:6px}
+.lsub{margin:0 0 12px;color:var(--muted);font-size:.9rem}
+.lockcard label{text-align:left}
+.pwrow{position:relative}.pwrow input{padding-right:64px}
+.eye{position:absolute;right:4px;top:4px;min-height:36px;padding:4px 12px;background:transparent;color:var(--muted);font-size:.8rem}
+.meter{height:6px;border-radius:9px;background:var(--line);margin-top:8px;overflow:hidden}
+.meter i{display:block;height:100%;width:0;transition:width .25s,background .25s}
+.mtxt{text-align:left;font-size:.78rem;color:var(--muted);margin-top:4px;min-height:1.2em}
+.ack{display:flex;gap:10px;text-align:left;font-size:.82rem;color:var(--muted);margin:12px 0 4px;align-items:flex-start}
+.ack input{width:20px;height:20px;flex:none;padding:0;margin-top:2px;accent-color:var(--accent)}
+.err{color:#b23a3a;font-size:.86rem;min-height:1.3em;margin-top:8px}
+@media(prefers-color-scheme:dark){.err{color:#ff9b9b}}
+.go{width:100%;margin-top:10px}
+.linkbtn{background:none;color:var(--muted);text-decoration:underline;font-size:.8rem;min-height:0;padding:12px 8px 0;border-radius:0}
+</style>
+</head>
+<body class="locked">
+
+<div id="lock"><div class="lockcard">
+  <h1 id="lockTitle">Private journal</h1>
+  <p class="lsub" id="lockSub"></p>
+  <form id="lockForm">
+    <label for="pw1">Passphrase</label>
+    <div class="pwrow"><input type="password" id="pw1" autocomplete="current-password" autocapitalize="none" spellcheck="false"><button type="button" class="eye" id="eyeBtn">Show</button></div>
+    <div id="setupOnly" style="display:none">
+      <div class="meter"><i id="meterBar"></i></div><div class="mtxt" id="meterTxt"></div>
+      <label for="pw2">Confirm passphrase</label>
+      <input type="password" id="pw2" autocomplete="new-password" autocapitalize="none" spellcheck="false">
+      <label class="ack"><input type="checkbox" id="ack"><span>I understand that if I forget this passphrase, my writing <b>cannot be recovered</b> by anyone.</span></label>
+    </div>
+    <div class="err" id="lockMsg"></div>
+    <button type="submit" class="go" id="lockBtn">Unlock</button>
+  </form>
+  <button class="linkbtn" id="forgotBtn" type="button" style="display:none">Forgot passphrase? Erase everything and start over</button>
+</div></div>
+
+<header>
+  <h1>My Story</h1>
+  <button class="ico" onclick="lockNow()" aria-label="Lock now"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button>
+  <button class="ico" onclick="menu.showModal()" aria-label="Menu"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg></button>
+</header>
+
+<main>
+  <input class="search" id="q" type="search" placeholder="Search…">
+  <div class="hint" id="count"></div>
+  <div id="list"></div>
+</main>
+<button class="fab" onclick="openEditor()" aria-label="Write a memory">+</button>
+
+<dialog id="dlg">
+  <div class="dh"><h2 id="dlgTitle">New memory</h2><button class="ico" onclick="dlg.close()" aria-label="Close">✕</button></div>
+  <div class="db">
+    <div class="row">
+      <div><label for="fAge">Age (optional)</label><input id="fAge" inputmode="numeric" placeholder="e.g. 7"></div>
+      <div><label for="fYear">Year (optional)</label><input id="fYear" inputmode="numeric" placeholder="e.g. 2007"></div>
+    </div>
+    <label for="fTitle">Title</label><input id="fTitle" placeholder="A few words to name this memory">
+    <label for="fText">What happened, and how did it feel?</label>
+    <textarea id="fText" placeholder="Write as much or as little as you want."></textarea>
+    <div class="wc"><span id="wc">0 words</span><span id="draftNote"></span></div>
+    <button class="soft" type="button" style="margin-top:10px" onclick="givePrompt()">Give me a prompt</button>
+  </div>
+  <div class="df"><button class="danger" id="delBtn" onclick="delEntry()">Delete</button><button onclick="saveEntry()">Save</button></div>
+</dialog>
+
+<dialog id="menu">
+  <div class="dh"><h2>Menu</h2><button class="ico" onclick="menu.close()" aria-label="Close">✕</button></div>
+  <div class="db menu">
+    <button class="soft" onclick="menu.close();lockNow()">Lock now</button>
+    <button class="soft" onclick="menu.close();openPd('change')">Change passphrase</button>
+    <button class="soft" onclick="menu.close();exportBackup()">Download encrypted backup</button>
+    <button class="soft" onclick="menu.close();$('imp').click()">Restore backup</button>
+    <button class="soft" onclick="menu.close();exportText()">Export readable text (not encrypted)</button>
+    <input type="file" id="imp" accept=".json,application/json" hidden>
+    <label for="autolock">Auto-lock after being away for</label>
+    <select id="autolock"><option value="1">1 minute</option><option value="2">2 minutes</option><option value="5">5 minutes</option><option value="15">15 minutes</option><option value="30">30 minutes</option></select>
+    <p class="note">Everything you write is encrypted on this device with AES-256 and never uploaded. If you forget your passphrase it can't be recovered, so download a backup now and then.</p>
+    <button class="danger" onclick="menu.close();eraseAll()">Erase everything</button>
+  </div>
+</dialog>
+
+<dialog id="pdlg">
+  <div class="dh"><h2 id="pdTitle">Change passphrase</h2><button class="ico" onclick="pdlg.close()" aria-label="Close">✕</button></div>
+  <div class="db">
+    <p class="note" id="pdSub"></p>
+    <label id="pdCurLbl" for="pdCur">Current passphrase</label><input type="password" id="pdCur" autocomplete="current-password" spellcheck="false">
+    <div id="pdNewWrap">
+      <label for="pdNew">New passphrase</label><input type="password" id="pdNew" autocomplete="new-password" spellcheck="false">
+      <div class="meter"><i id="pdMeterBar"></i></div><div class="mtxt" id="pdMeterTxt"></div>
+      <label for="pdNew2">Confirm new passphrase</label><input type="password" id="pdNew2" autocomplete="new-password" spellcheck="false">
+    </div>
+    <div class="err" id="pdMsg"></div>
+  </div>
+  <div class="df"><button class="soft" onclick="pdlg.close()">Cancel</button><button id="pdGo">Continue</button></div>
+</dialog>
+
+<div id="toast"></div>
+
+<script>
+const PROMPTS=['What is my earliest memory, and how does it feel to think of it?','Who made me feel safe when I was small?','What was a normal day like at home when I was 8?','When was I proud of myself as a child?','What was school really like for me?','Who did I wish understood me back then?','Is there a smell, song or place that takes me straight back to childhood?','What did I need as a child that I didn’t get?','What hard moment did I get through that I rarely give myself credit for?','When did I first feel I had to grow up quickly?','Which friendship shaped me the most, and why?','What would I say to myself at 10?'];
+const VKEY='lifestory_vault_v2',AKEY='lifestory_autolock',ITER=600000;
+const AAD=new TextEncoder().encode('lifestory-v2'),enc=new TextEncoder(),dec=new TextDecoder();
+let entries=[],notes={},siteTitle='',draftData=null,cryptoKey=null,vault=null,editingId=null;
+const $=id=>document.getElementById(id),dlg=$('dlg'),menu=$('menu'),pdlg=$('pdlg');
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let tt;function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2800)}
+
+/* ---- encryption: PBKDF2-SHA256 -> AES-256-GCM ---- */
+const b64e=buf=>{const u=new Uint8Array(buf);let s='';for(let i=0;i<u.length;i+=0x8000)s+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(s)};
+const b64d=str=>{const s=atob(str),u=new Uint8Array(s.length);for(let i=0;i<s.length;i++)u[i]=s.charCodeAt(i);return u};
+async function deriveKey(pass,salt,iter){const base=await crypto.subtle.importKey('raw',enc.encode(pass),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:iter,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['encrypt','decrypt'])}
+async function seal(key,obj){const iv=crypto.getRandomValues(new Uint8Array(12));const ct=await crypto.subtle.encrypt({name:'AES-GCM',iv,additionalData:AAD},key,enc.encode(JSON.stringify(obj)));return{iv:b64e(iv),ct:b64e(ct)}}
+async function openBox(key,box){return JSON.parse(dec.decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:b64d(box.iv),additionalData:AAD},key,b64d(box.ct))))}
+async function tryOpenVault(v,pass){try{if(!v||v.v!==2||!(v.iter>=100000&&v.iter<=5000000))return null;const key=await deriveKey(pass,b64d(v.salt),v.iter);return{key,s:await openBox(key,v)}}catch(e){return null}}
+const getState=()=>({entries,notes,title:siteTitle,draft:draftData});
+function setState(st){entries=Array.isArray(st.entries)?st.entries:[];notes=(st.notes&&typeof st.notes==='object')?st.notes:{};siteTitle=st.title||'';draftData=st.draft||null}
+let saveTimer=null,chain=Promise.resolve();
+function flush(){clearTimeout(saveTimer);chain=chain.then(async()=>{if(!cryptoKey||!vault)return;const b=await seal(cryptoKey,getState());vault.iv=b.iv;vault.ct=b.ct;localStorage.setItem(VKEY,JSON.stringify(vault))}).catch(e=>{console.error(e);toast('Could not save. Please download a backup.')});return chain}
+function persist(now){if(!cryptoKey)return Promise.resolve();if(now)return flush();clearTimeout(saveTimer);saveTimer=setTimeout(flush,350);return Promise.resolve()}
+
+/* ---- passphrase strength ---- */
+const COMMON=/password|passw0rd|qwerty|123456|letmein|iloveyou|admin|welcome|abc123|lifestory|myjournal|12345678/;
+function bitsOf(p){let pool=0;if(/[a-z]/.test(p))pool+=26;if(/[A-Z]/.test(p))pool+=26;if(/\d/.test(p))pool+=10;if(/[^A-Za-z0-9]/.test(p))pool+=32;let b=p.length*Math.log2(pool||1);if(new Set(p).size<=Math.ceil(p.length/3))b*=.5;if(COMMON.test(p.toLowerCase()))b=Math.min(b,20);return b}
+function meter(p,bar,txt){if(!p){bar.style.width='0';txt.textContent='';return}const b=bitsOf(p);let w,c,t;if(b<40){w=25;c='#d65b5b';t='Weak. Try several unrelated words.'}else if(b<60){w=50;c='#e0a030';t='Fair. Longer is stronger.'}else if(b<80){w=75;c='#6bbf8f';t='Strong'}else{w=100;c='#3aa56f';t='Excellent'}bar.style.width=w+'%';bar.style.background=c;txt.textContent=t}
+function passProblem(p){if(p.length<10)return 'Use at least 10 characters. Four or more random words works well.';if(bitsOf(p)<40)return 'That passphrase is too easy to guess. Try several unrelated words.';return ''}
+$('pw1').addEventListener('input',()=>{if(mode==='setup')meter($('pw1').value,$('meterBar'),$('meterTxt'))});
+$('pdNew').addEventListener('input',()=>meter($('pdNew').value,$('pdMeterBar'),$('pdMeterTxt')));
+$('eyeBtn').onclick=()=>{const s=$('pw1').type==='password';$('pw1').type=s?'text':'password';$('pw2').type=s?'text':'password';$('eyeBtn').textContent=s?'Hide':'Show'};
+
+/* ---- lock screen ---- */
+let mode='unlock',fails=0,lockedUntil=0,busy=false,lockInt=null;
+function showLock(m,msg){
+  mode=m;document.body.classList.add('locked');
+  const setup=m==='setup',unlock=m==='unlock',form=setup||unlock;
+  $('lockForm').style.display=form?'block':'none';
+  $('lockTitle').textContent=setup?'Create your passphrase':(unlock?'Private journal':'Can’t open your journal');
+  $('lockSub').textContent=setup?'This encrypts everything you write. Use four or more random words, or at least 12 characters. You will need it every time you open the app.'
+    :unlock?'Enter your passphrase to open your journal.'
+    :m==='unsupported'?'Encryption isn’t available here, so nothing would be saved. Please open this in a current Chrome, Edge, Safari or Firefox.'
+    :'Your saved data couldn’t be read. Don’t erase anything yet. Try restoring an encrypted backup.';
+  $('setupOnly').style.display=setup?'block':'none';
+  $('pw1').autocomplete=setup?'new-password':'current-password';
+  $('lockBtn').textContent=setup?'Create and encrypt':'Unlock';
+  $('forgotBtn').style.display=(unlock||m==='corrupt')?'inline-block':'none';
+  $('pw1').value='';$('pw2').value='';$('ack').checked=false;$('pw1').type='password';$('pw2').type='password';$('eyeBtn').textContent='Show';
+  meter('',$('meterBar'),$('meterTxt'));$('lockMsg').textContent=msg||'';
+  if(form)setTimeout(()=>$('pw1').focus(),60);
+}
+function startLockout(sec){lockedUntil=Date.now()+sec*1000;$('lockBtn').disabled=true;clearInterval(lockInt);
+  lockInt=setInterval(()=>{const r=Math.ceil((lockedUntil-Date.now())/1000);if(r<=0){clearInterval(lockInt);$('lockBtn').disabled=false;$('lockMsg').textContent=''}else $('lockMsg').textContent='Too many attempts. Try again in '+r+'s.'},300)}
+$('lockForm').addEventListener('submit',async ev=>{
+  ev.preventDefault();if(busy)return;
+  const p=$('pw1').value,btn=$('lockBtn'),label=btn.textContent,fail=t=>{$('lockMsg').textContent=t};
+  if(mode==='setup'){
+    const pr=passProblem(p);if(pr)return fail(pr);
+    if(p!==$('pw2').value)return fail('The two passphrases don’t match.');
+    if(!$('ack').checked)return fail('Please tick the box to confirm you understand.');
+    busy=true;btn.disabled=true;btn.textContent='Encrypting…';
+    try{const salt=crypto.getRandomValues(new Uint8Array(16));cryptoKey=await deriveKey(p,salt,ITER);setState({});vault={v:2,kdf:'PBKDF2-SHA256',iter:ITER,salt:b64e(salt)};await flush();if(!localStorage.getItem(VKEY))throw 0;
+      try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+      onUnlocked();toast('Your journal is encrypted and ready.')}
+    catch(e){cryptoKey=null;fail('Something went wrong creating the vault.')}
+    finally{busy=false;btn.disabled=false;btn.textContent=label}
+  }else if(mode==='unlock'){
+    if(!p||Date.now()<lockedUntil)return;
+    busy=true;btn.disabled=true;btn.textContent='Unlocking…';
+    const r=await tryOpenVault(vault,p);busy=false;btn.textContent=label;btn.disabled=false;
+    if(r){fails=0;cryptoKey=r.key;setState(r.s);onUnlocked()}
+    else{fails++;$('pw1').value='';fail('Incorrect passphrase.');if(fails>=3)startLockout(Math.min(60,Math.pow(2,fails-2)))}
+  }
+});
+$('forgotBtn').onclick=()=>eraseAll();
+function onUnlocked(){document.body.classList.remove('locked');$('autolock').value=String(autoMin());render();resetIdle();$('lockMsg').textContent=''}
+async function lockNow(msg){
+  if(!cryptoKey)return;
+  [dlg,menu,pdlg].forEach(d=>{if(d.open)d.close()});
+  await flush();cryptoKey=null;entries=[];notes={};siteTitle='';draftData=null;editingId=null;clearTimeout(idleT);
+  ['fTitle','fText','fAge','fYear','q','pdCur','pdNew','pdNew2'].forEach(i=>$(i).value='');
+  render();try{vault=JSON.parse(localStorage.getItem(VKEY))}catch(e){}
+  showLock('unlock',typeof msg==='string'?msg:'');
+}
+let idleT=null,hiddenAt=0;
+const autoMin=()=>{const n=parseInt(localStorage.getItem(AKEY)||'5',10);return n>0?n:5};
+function resetIdle(){clearTimeout(idleT);if(!cryptoKey)return;idleT=setTimeout(()=>lockNow('Locked after being idle.'),autoMin()*60000)}
+['pointerdown','keydown','touchstart','scroll'].forEach(e=>addEventListener(e,resetIdle,{passive:true}));
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden){hiddenAt=Date.now();persist(true)}
+  else if(cryptoKey&&hiddenAt&&Date.now()-hiddenAt>=autoMin()*60000)lockNow('Locked while you were away.');
+  else resetIdle();
+});
+$('autolock').addEventListener('change',()=>{localStorage.setItem(AKEY,$('autolock').value);resetIdle();toast('Auto-lock updated')});
+
+/* ---- the journal ---- */
+const ageNum=e=>{const n=parseInt(e.age,10);return isNaN(n)?9999:n};
+function render(){
+  const q=$('q').value.trim().toLowerCase();
+  const list=entries.filter(e=>!q||((e.title||'')+' '+(e.text||'')).toLowerCase().includes(q)).sort((a,b)=>ageNum(a)-ageNum(b)||(a.created||0)-(b.created||0));
+  const words=entries.reduce((n,e)=>n+(e.text&&e.text.trim()?e.text.trim().split(/\s+/).length:0),0);
+  $('count').textContent=entries.length?entries.length+(entries.length===1?' memory':' memories')+' · '+words.toLocaleString()+' words':'';
+  $('list').innerHTML=list.length?list.map(e=>`<article class="card" data-id="${esc(e.id)}"><h3>${esc(e.title||'Untitled')}</h3><div class="meta">${[e.age?'Age '+esc(e.age):'',e.year?esc(e.year):''].filter(Boolean).join(' · ')}</div><p>${esc(e.text||'')}</p></article>`).join('')
+    :`<div class="empty"><h2>${entries.length?'Nothing matches':'Start anywhere'}</h2><p>${entries.length?'Try a different word.':'Tap + to write your first memory. A small one is fine. There is no right order, and you can stop any time.'}</p></div>`;
+}
+$('list').addEventListener('click',ev=>{const c=ev.target.closest('.card');if(c)openEditor(c.dataset.id)});
+$('q').addEventListener('input',render);
+
+function updateWc(){const t=$('fText').value.trim();$('wc').textContent=(t?t.split(/\s+/).length:0)+' words'}
+function saveDraft(){if(editingId)return;const d={age:$('fAge').value,year:$('fYear').value,title:$('fTitle').value,text:$('fText').value};if(d.title||d.text.trim()){draftData=d;persist();$('draftNote').textContent='Draft saved ✓'}}
+function openEditor(id){
+  editingId=id||null;const e=id?entries.find(x=>x.id===id):null,src=e||draftData;
+  $('dlgTitle').textContent=e?'Edit memory':'New memory';$('delBtn').style.display=e?'block':'none';
+  $('fAge').value=src?src.age||'':'';$('fYear').value=src?src.year||'':'';$('fTitle').value=src?src.title||'':'';$('fText').value=src?src.text||'':'';
+  $('fText').placeholder='Write as much or as little as you want.';
+  $('draftNote').textContent=(!e&&draftData)?'Restored your unsaved draft':'';updateWc();dlg.showModal();
+}
+function givePrompt(){const p=PROMPTS[Math.floor(Math.random()*PROMPTS.length)];$('fText').placeholder=p;if(!$('fText').value.trim()){$('fText').value=p+'\n\n';updateWc();saveDraft()}$('fText').focus()}
+['fAge','fYear','fTitle','fText'].forEach(i=>$(i).addEventListener('input',()=>{updateWc();saveDraft()}));
+function saveEntry(){
+  const d={age:$('fAge').value.trim(),year:$('fYear').value.trim(),title:$('fTitle').value.trim(),text:$('fText').value};
+  if(!d.title&&!d.text.trim()){dlg.close();return}
+  if(editingId){Object.assign(entries.find(x=>x.id===editingId),d)}
+  else entries.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),created:Date.now(),...d});
+  draftData=null;persist(true);dlg.close();render();toast('Saved. Be gentle with yourself.');
+}
+function delEntry(){if(editingId&&confirm('Delete this memory?')){entries=entries.filter(e=>e.id!==editingId);persist(true);dlg.close();render()}}
+
+/* ---- backup / restore / export ---- */
+function download(name,type,content){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([content],{type}));a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}
+const today=()=>new Date().toISOString().slice(0,10);
+async function exportBackup(){await flush();download('my-story-encrypted-backup-'+today()+'.json','application/json',localStorage.getItem(VKEY));toast('Encrypted backup downloaded.')}
+function exportText(){
+  if(!confirm('This file will NOT be encrypted. Anyone who opens it can read it. Continue?'))return;
+  let t='MY STORY\n\n';[...entries].sort((a,b)=>ageNum(a)-ageNum(b)).forEach(e=>{t+=`${e.title||'Untitled'}${e.age?' · Age '+e.age:''}${e.year?' · '+e.year:''}\n${e.text||''}\n\n`});
+  download('my-story-'+today()+'.txt','text/plain',t)}
+let pdMode='change',pending=null;
+function openPd(m,data){pdMode=m;pending=data||null;
+  $('pdTitle').textContent=m==='change'?'Change passphrase':'Restore encrypted backup';
+  $('pdSub').textContent=m==='change'?'Your writing will be re-encrypted with the new passphrase. Older backups still need the passphrase they were made with.':'Enter the passphrase you used when you made this backup.';
+  $('pdCurLbl').textContent=m==='change'?'Current passphrase':'Backup passphrase';$('pdNewWrap').style.display=m==='change'?'block':'none';
+  ['pdCur','pdNew','pdNew2'].forEach(i=>$(i).value='');$('pdMsg').textContent='';meter('',$('pdMeterBar'),$('pdMeterTxt'));pdlg.showModal()}
+$('pdGo').onclick=async()=>{
+  const msg=t=>{$('pdMsg').textContent=t},cur=$('pdCur').value;if(!cur)return msg('Enter the passphrase.');
+  const b=$('pdGo');b.disabled=true;b.textContent='Working…';
+  try{
+    if(pdMode==='change'){
+      const n=$('pdNew').value,pr=passProblem(n);if(pr)return msg(pr);if(n!==$('pdNew2').value)return msg('The new passphrases don’t match.');
+      await flush();if(!(await tryOpenVault(vault,cur)))return msg('The current passphrase is incorrect.');
+      const salt=crypto.getRandomValues(new Uint8Array(16));cryptoKey=await deriveKey(n,salt,ITER);vault={v:2,kdf:'PBKDF2-SHA256',iter:ITER,salt:b64e(salt)};await flush();
+      pdlg.close();toast('Passphrase changed. Please download a fresh backup.');
+    }else{
+      const r=await tryOpenVault(pending,cur);if(!r)return msg('That passphrase didn’t open the backup.');
+      if(!confirm('Replace everything in this journal with the backup?'))return;
+      setState(r.s);await flush();pdlg.close();render();toast('Backup restored.');
+    }
+  }finally{b.disabled=false;b.textContent='Continue'}
+};
+$('imp').addEventListener('change',ev=>{const f=ev.target.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>{try{const d=JSON.parse(r.result);if(d&&d.v===2&&d.ct&&d.salt&&d.iv)openPd('restore',d);else alert('That file is not an encrypted backup from this app.')}catch(e){alert('That file is not a valid backup.')}};
+  r.readAsText(f);ev.target.value=''});
+function eraseAll(){if(confirm('Erase ALL memories from this device? This cannot be undone.')&&confirm('Really erase everything? Download a backup first if unsure.')){localStorage.removeItem(VKEY);cryptoKey=null;location.reload()}}
+
+/* ---- start ---- */
+function init(){
+  if(!(window.crypto&&crypto.subtle))return showLock('unsupported');
+  let raw=null;try{raw=localStorage.getItem(VKEY)}catch(e){return showLock('unsupported')}
+  if(raw){try{vault=JSON.parse(raw)}catch(e){vault=null}return showLock(vault&&vault.ct&&vault.salt?'unlock':'corrupt')}
+  showLock('setup');
+}
+if('serviceWorker' in navigator&&location.protocol.startsWith('http')){navigator.serviceWorker.register('sw.js').catch(()=>{})}
+init();
+</script>
+</body>
+</html>
